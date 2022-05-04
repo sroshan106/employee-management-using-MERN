@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { Link } from 'react-router-dom';
 
 export default function Register() {
     const [user, setUser ] = useState({
@@ -19,12 +20,21 @@ export default function Register() {
     }
 
     function handleSubmit() {
-        console.log(user);
+        console.log('handling submit');
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user),
+            mode: 'no-cors'
+        };
+        fetch('https://localhost:4600/register', requestOptions)
+        .then(response => response)
+        .then(data => console.log(data));
     }
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form method="POST" onSubmit={handleSubmit}>
                 <div>
                     <label>
                     Name:
@@ -57,7 +67,7 @@ export default function Register() {
 
             <h2>OR</h2>
             
-            <button >Login Now</button>
+            <Link to="/login">Login Now</Link>
         </div>
     )
 }
