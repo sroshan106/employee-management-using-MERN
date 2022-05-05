@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const req = require("express/lib/request");
+const validatorEmail = require("email-validator");
+
 
 const app=express();
 
@@ -22,24 +23,43 @@ const bcrypt = require("bcrypt");
 const User = require("./model/user");
 
 app.post('/register', async function(req, res) {
-    console.log(req.headers);
-    console.log(req.body);
 
-    const {name,email,password, rePassword} = req.body;
+    let {name,email,password, rePassword} = req.body;
+
+    if ( '' === name || '' === email || '' === password || ''===rePassword ){
+        res.json({message:"Please check data and try again"})
+    }
+    if ( ! validatorEmail.validate(email) ) {
+        res.json({message:"Invalid Email"})
+    }
+    
+    const validPassword = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
+    if ( ! validPassword.test(password) ){
+        res.json({message:"Password does not match criteria"})
+    }
+    if (password!==rePassword ) {
+        res.json({message:"Password does not match"})
+    }
+
 
     const emailExists =  await User.findOne({email:email});
-    console.log(email);
-    res.status(200).json(req.body);
+    if ( emailExists ) {
+        res.json({message:"Email already exist"})
+    } else {
+        password = await bcrypt.hash(req.body.password, 10);
+
+        const dbUser = new User({
+            username: name,
+            email:email,
+            password:password
+        })
+        dbUser.save();
+        res.status(200).json('employee saved');
+    }
 })
 
-
-
-// async function createNewUser() {
-//     const customer= new User({username: 'new customer',password: 'new address',email: 'customer1@new.com',});
-//     const result = await customer.save();
-//     console.log(result);
-// }
-// createNewUser();
-
+app.post('/login', async function(req,res) {
+    console.log(req.body);
+})
 
 app.listen(4600);

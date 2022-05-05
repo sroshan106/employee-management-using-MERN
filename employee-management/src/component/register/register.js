@@ -29,14 +29,16 @@ export default function Register() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        validateInput();
+        if ( ! validateInput() ) {
+            return;
+        }
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
         };
         fetch('http://localhost:4600/register', requestOptions)
-        .then(response => response)
+        .then(response => response.json())
         .then(data => console.log(data));
     }
     
@@ -68,8 +70,12 @@ export default function Register() {
             inputVar['rePassword'] = '';
 
         }
-    
         setError({ ...inputVar, error});
+        if (error.name==="" && error.email==="" && error.password==="" && error.rePassword==="" ){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     return (
