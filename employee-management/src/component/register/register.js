@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { validEmail,validName, validPassword } from '../regex/regex';
 
-export default function Register() {
+export default function Register(props) {
     const [user, setUser ] = useState({
         name:"",
         email:"",
@@ -17,6 +17,9 @@ export default function Register() {
         rePassword:""
     });
 
+    const { currentUser, setCurrentUser } = props;
+    const {id, email, name} = currentUser;
+    const Navigate = useNavigate();
 
     function handleChangeUser(e) {
         const {name, value} = e.target;
@@ -80,6 +83,7 @@ export default function Register() {
 
     return (
         <div>
+            {id && Navigate('/')}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>

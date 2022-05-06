@@ -14,7 +14,7 @@ app.use(bodyParser.json(), urlEncodedParser );
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    res.append('Access-Control-Allow-Headers', 'Content-Type, X-Access-Token');
     next();
 });
 
@@ -89,7 +89,6 @@ app.post('/login', async function(req,res) {
 
 function verifyUser(req,res, next){
     const token = req.headers["x-access-token"]?.split(' ')[1];
-    // console.log(token);
     if(token) {
         jwt.verify(token, 'I am a secret token', (err,decoded) => {
             
@@ -111,6 +110,6 @@ function verifyUser(req,res, next){
 }
 
 app.get('/homepage', verifyUser, (req,res) => {
-    res.json({isLoggedIn:true,username:req.user.username})
+    res.json({isLoggedIn:true,username:req.user.username,id:req.user.id, email:req.user.email})
 })
 app.listen(4600);

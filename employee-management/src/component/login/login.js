@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { validEmail, validPassword } from '../regex/regex';
 
-function Login() {
+
+function Login(props) {
+
     const [user, setUser ] = useState({
         email:"",
         password:"",
     });
 
+    const { currentUser, setCurrentUser } = props;
+    const {id, email, name} = currentUser;
+    
+    const Navigate = useNavigate();
 
     function handleChangeUser(e) {
         const {name, value} = e.target;
@@ -41,6 +47,7 @@ function Login() {
     }
 
     function handleSubmit(e) {
+        
         e.preventDefault();
         if ( ! validateInput() ) {
             return;
@@ -56,6 +63,8 @@ function Login() {
             console.log(data)
             if(data.message==="Success" && data.token) {
                 localStorage.setItem("token", data.token);
+                
+                Navigate('/');
             }
         }
         );
@@ -63,6 +72,7 @@ function Login() {
 
     return (
         <div>
+            {id && Navigate('/')}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>

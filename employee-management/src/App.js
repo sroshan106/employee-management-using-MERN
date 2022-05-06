@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +12,13 @@ import Register from './component/register/register';
 
 
 function App() {
+
+  const [currentUser,setCurrentUser] = useState({
+    id:"",
+    name:"",
+    email:""
+  })
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -31,9 +39,9 @@ function App() {
             </nav>
 
             <Routes>
-              <Route path="/" element={<Homepage />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route path="/register" element={<Register />}></Route>
+              <Route path="/" element={<Homepage currentUser={currentUser} setCurrentUser={setCurrentUser}   />}></Route>
+              <Route path="/login" element={<Login currentUser={currentUser} setCurrentUser={setCurrentUser} />}></Route>
+              <Route path="/register" element={<Register currentUser={currentUser} setCurrentUser={setCurrentUser} />}></Route>
             </Routes>
           </div>
         </Router>
