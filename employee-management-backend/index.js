@@ -37,7 +37,7 @@ app.post('/register', async function(req, res) {
     if ( ! validPassword.test(password) ){
         res.json({message:"Password does not match criteria"})
     }
-    if (password!==rePassword ) {
+    if ( password!==rePassword ) {
         res.json({message:"Password does not match"})
     }
 
@@ -49,8 +49,8 @@ app.post('/register', async function(req, res) {
         password = await bcrypt.hash(req.body.password, 10);
 
         const dbUser = new User({
-            username: name,
-            email:email,
+            username: name.toLowerCase(),
+            email:email.toLowerCase(),
             password:password
         })
         dbUser.save();
@@ -59,7 +59,58 @@ app.post('/register', async function(req, res) {
 })
 
 app.post('/login', async function(req,res) {
-    console.log(req.body);
+
+    let {email, password } = req.body;
+
+    const dbUser =  await User.findOne({email:email.toLowerCase()});
+    if ( dbUser ) {
+        
+        if ( await bcrypt.compare( password, dbUser.password ) ) {
+
+            const payload_data = {
+                id: dbUser._id,
+                username:dbUser.username,
+                email:dbUser.email
+            }
+
+            jwt.sign(payload_data,'I am a secret token',{expiresIn:86400*30},(err,token)=> {
+                if(err){
+                    res.json({message:err})
+                }
+                res.json({message:"Success",token:"Bearer " + token});
+            })
+        }  else{
+            res.json({message:"Invalid Password"})
+        }
+    } else {
+        res.json({message:'User does not exist'})
+    }
 })
 
+function verifyUser(req,res, next){
+    const token = req.headers["x-access-token"]?.split(' ')[1];
+    // console.log(token);
+    if(token) {
+        jwt.verify(token, 'I am a secret token', (err,decoded) => {
+            
+            if(err) {
+                return res.json({
+                    isLoggedIn:false,
+                    message:"Failed to authenticate the user"
+                })
+            }
+            req.user={}
+            req.user.id = decoded.id,
+            req.user.username = decoded.username,
+            req.user.email = decoded.email
+            next()
+        } )
+    } else{
+        res.json({message:"No token found", isLoggedIn:false})
+    }
+}
+
+app.get('/homepage', verifyUser, (req,res) => {
+    res.json({isLoggedIn:true,username:req.user.username})
+})
 app.listen(4600);
