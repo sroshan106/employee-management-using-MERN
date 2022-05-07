@@ -42,6 +42,7 @@ export default function Register(props) {
     function handleSubmit(e) {
         e.preventDefault();
         if ( ! validateInput() ) {
+            setRegistrationError('');
             return;
         }
         const requestOptions = {
@@ -54,6 +55,7 @@ export default function Register(props) {
         .then( (data) => {
             if(data.isSaved) {
                 Navigate('/login');
+                setRegistrationError('');
             } else {
                 setRegistrationError(data.message);
             }
@@ -90,7 +92,7 @@ export default function Register(props) {
 
         }
         setError({ ...inputVar, error});
-        if (error.name==="" && error.email==="" && error.password==="" && error.rePassword==="" ){
+        if (inputVar.name==="" && inputVar.email==="" && inputVar.password==="" && inputVar.rePassword==="" ){
             return true;
         } else {
             return false;
@@ -101,8 +103,8 @@ export default function Register(props) {
         <div className='register-container'>
             <div className='register-wrapper'>
                 <h2 className="header-form">Sign up for free to start working.</h2>
-                {registrationError && <p className='warning-message'>{registrationError}</p> }
                 <form onSubmit={handleSubmit}>
+                    {registrationError && <p className='warning-message-big'>{registrationError}</p> }
                     <div className='inputBoxes'>
                         <input type="text" name="name" value={user.name} onChange={handleChangeUser} placeholder="Name"/>
                     </div>

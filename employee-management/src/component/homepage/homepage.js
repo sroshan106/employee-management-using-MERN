@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authHeader from '../../service/auth-header';
-
+import './homepage.css';
 
 function Homepage(props) {
 
@@ -22,7 +22,7 @@ function Homepage(props) {
         .then((data) => {
             if(data.isLoggedIn && data.username) {
                 let userData = {
-                    name:data.username,
+                    name:data.username.toUpperCase(),
                     id:data.id,
                     email:data.email
                 }
@@ -49,12 +49,12 @@ function Homepage(props) {
         setCurrentUser( {...currentUser, ...userData } );
     }
     return (
-        <div>
+        <div className='homepage-container'>
             
-            {id && <p>{id}</p>}
-            {name && <p>{name}</p>}
-            {email && <p>{email}</p>}
-            {id && <button onClick={logOutUser}>Logout</button>}
+            {id && <p>Your login ID: {id}</p>}
+            {name && <p>Your user name: {name}</p>}
+            {email && <p>Your Email: {email}</p>}
+            {id && <button className='logout-button' onClick={logOutUser}>Logout</button>}
         </div>
     )
 }

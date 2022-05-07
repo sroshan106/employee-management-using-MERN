@@ -61,9 +61,18 @@
     text-decoration: none;
     color: red;
     font-style: italic;
-    margin: 10px 0 0 0;
+    margin: 10px 0 0 auto;
 }
 
+.register-container p.warning-message-big{
+    font-size: medium;
+    font-weight: 400;
+    text-decoration: none;
+    color: red;
+    font-style: italic;
+    margin: 10px 0 0 0;
+    text-align: left;
+}
 
 .register-container .info-message {
     font-size: small;
