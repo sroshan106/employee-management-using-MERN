@@ -27,24 +27,24 @@ app.post('/register', async function(req, res) {
     let {name,email,password, rePassword} = req.body;
 
     if ( '' === name || '' === email || '' === password || ''===rePassword ){
-        res.json({message:"Please check data and try again"})
+        res.json({isSaved:false, message:"Please check data and try again"})
     }
     if ( ! validatorEmail.validate(email) ) {
-        res.json({message:"Invalid Email"})
+        res.json({isSaved:false, message:"Invalid Email"})
     }
     
     const validPassword = new RegExp('^(?=.*?[A-Za-z])(?=.*?[0-9]).{6,}$');
     if ( ! validPassword.test(password) ){
-        res.json({message:"Password does not match criteria"})
+        res.json({isSaved:false,message:"Password does not match criteria"})
     }
     if ( password!==rePassword ) {
-        res.json({message:"Password does not match"})
+        res.json({isSaved:false,message:"Password does not match"})
     }
 
 
     const emailExists =  await User.findOne({email:email});
     if ( emailExists ) {
-        res.json({message:"Email already exist"})
+        res.json({isSaved:false, message:"Email already exist"});
     } else {
         password = await bcrypt.hash(req.body.password, 10);
 
@@ -54,8 +54,9 @@ app.post('/register', async function(req, res) {
             password:password
         })
         dbUser.save();
-        res.status(200).json('employee saved');
+        res.status(200).json({isSaved:true});
     }
+    res.json({isSaved:false,message:"Some error occured"});
 })
 
 app.post('/login', async function(req,res) {

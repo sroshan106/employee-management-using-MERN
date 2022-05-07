@@ -9,7 +9,10 @@ function Homepage(props) {
 
     const { currentUser, setCurrentUser } = props;
     const {id, email, name} = currentUser;
-    useEffect( () => { 
+    useEffect( () => {
+        if ( !id ) {
+            Navigate('/login')
+        }
         const requestOptions = {
             method: 'GET',
             headers: authHeader(),
@@ -17,16 +20,14 @@ function Homepage(props) {
         fetch('http://localhost:4600/homepage', requestOptions)
         .then(response => response.json())
         .then((data) => {
-            console.log(data)
             if(data.isLoggedIn && data.username) {
-                // console.log(data);
                 let userData = {
                     name:data.username,
                     id:data.id,
                     email:data.email
                 }
                 setCurrentUser( {...currentUser, ...userData });
-            } else{
+            } else {
                 let userData = {
                     name:'',
                     id:'',
@@ -36,20 +37,20 @@ function Homepage(props) {
             }
         }
         );
-    }, [])
+    }, [currentUser, setCurrentUser, id, Navigate ])
 
-    const logOutUser = () =>{
+    const logOutUser = () => {
         localStorage.removeItem('token');
         let userData = {
             name:'',
             id:'',
             email:''
         }
-        setCurrentUser( {...currentUser, ...userData });
+        setCurrentUser( {...currentUser, ...userData } );
     }
     return (
         <div>
-            { ! id && Navigate('/login')}
+            
             {id && <p>{id}</p>}
             {name && <p>{name}</p>}
             {email && <p>{email}</p>}

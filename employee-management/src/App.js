@@ -9,6 +9,7 @@ import {
 import Homepage from './component/homepage/homepage';
 import Login from './component/login/login';
 import Register from './component/register/register';
+import './app.css';
 
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
       <header className="App-header">
         <Router>
           <div>
-            <nav>
+            <nav className="navbar navbar-default">
               <ul>
                 <li>
                   <Link to="/">Home</Link>
@@ -36,6 +37,8 @@ function App() {
                   <Link to="/register">Register</Link>
                 </li>
               </ul>
+
+              <p>{currentUser.name}</p>
             </nav>
 
             <Routes>

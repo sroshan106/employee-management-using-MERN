@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { validEmail,validName, validPassword } from '../regex/regex';
 
@@ -17,9 +17,17 @@ export default function Register(props) {
         rePassword:""
     });
 
-    const { currentUser, setCurrentUser } = props;
-    const {id, email, name} = currentUser;
+    const [registrationError, setRegistrationError] = useState("");
     const Navigate = useNavigate();
+    const { currentUser } = props;
+    
+
+    useEffect( () => { 
+        
+        if ( currentUser.id ){
+            Navigate('/');
+        }
+    }, [currentUser, Navigate])
 
     function handleChangeUser(e) {
         const {name, value} = e.target;
@@ -42,7 +50,14 @@ export default function Register(props) {
         };
         fetch('http://localhost:4600/register', requestOptions)
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then( (data) => {
+            if(data.isSaved) {
+                Navigate('/login');
+            } else {
+                setRegistrationError(data.message);
+            }
+
+        });
     }
     
 
@@ -83,7 +98,7 @@ export default function Register(props) {
 
     return (
         <div>
-            {id && Navigate('/')}
+            <h2>{registrationError}</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>
