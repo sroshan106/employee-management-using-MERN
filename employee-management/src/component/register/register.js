@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { validEmail,validName, validPassword } from '../regex/regex';
+import './register.css'
 
 export default function Register(props) {
     const [user, setUser ] = useState({
@@ -97,46 +98,37 @@ export default function Register(props) {
     }
 
     return (
-        <div>
-            <h2>{registrationError}</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>
-                    Name:
-                    <input type="text" name="name" value={user.name} onChange={handleChangeUser} />
-                    </label>
-                    {error.name && <span className='err'>{error.name}</span>}
-                </div>
-                <div>
-                    <label>
-                    Email:
-                    <input type="text" name="email" value={user.email} onChange={handleChangeUser} />
-                    </label>
-                    {error.email && <span className='err'>{error.email}</span>}
-                </div>
+        <div className='register-container'>
+            <div className='register-wrapper'>
+                <h2 className="header-form">Sign up for free to start working.</h2>
+                {registrationError && <p className='warning-message'>{registrationError}</p> }
+                <form onSubmit={handleSubmit}>
+                    <div className='inputBoxes'>
+                        <input type="text" name="name" value={user.name} onChange={handleChangeUser} placeholder="Name"/>
+                    </div>
+                    {error.name && <div className='warning-message'>{error.name}</div>}
+                    <div className='inputBoxes'>
+                        <input type="text" name="email" value={user.email} onChange={handleChangeUser} placeholder="Email"/>
+                    </div>
+                    {error.email && <div className='warning-message'>{error.email}</div>}
+                    <div className='inputBoxes'>
+                        <input type="password" name="password" value={user.password} onChange={handleChangeUser} placeholder="Password"/>
+                    </div>
+                    <div> <p className='info-message'>**Password must contain letters and number</p></div>
+                    {error.password && <div className='warning-message'>{error.password}</div>}
+                    <div className='inputBoxes'>
+                        <input type="password" name="rePassword" value={user.rePassword} onChange={handleChangeUser} placeholder="Confirm Password"/>
+                    </div>
+                    {error.rePassword && <div className='warning-message'>{error.rePassword}</div>}
 
-                <div>
-                    <label>
-                    Password:
-                    <input type="password" name="password" value={user.password} onChange={handleChangeUser} />
-                    </label>
-                    {error.password && <span className='err'>{error.password}</span>}
+                    <button className='register-button' type="submit">Register</button>
+                </form>
+                <h2>OR</h2>
+                
+                <div className='login-button'>
+                    <Link to="/login">Login Now</Link>
                 </div>
-
-                <div>
-                    <label>
-                    Confirm Password:
-                    <input type="password" name="rePassword" value={user.rePassword} onChange={handleChangeUser} />
-                    </label>
-                    {error.rePassword && <span className='err'>{error.rePassword}</span>}
-                </div>
-
-                <button type="submit">Register</button>
-            </form>
-
-            <h2>OR</h2>
-            
-            <Link to="/login">Login Now</Link>
+            </div>
         </div>
     )
 }

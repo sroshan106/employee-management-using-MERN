@@ -78,13 +78,13 @@ app.post('/login', async function(req,res) {
                 if(err){
                     res.json({message:err})
                 }
-                res.json({message:"Success",token:"Bearer " + token});
+                res.json({isValid:true, message:"Success",token:"Bearer " + token});
             })
         }  else{
-            res.json({message:"Invalid Password"})
+            res.json({isValid:false, message:"Invalid email or password*"})
         }
     } else {
-        res.json({message:'User does not exist'})
+        res.json({isValid:false, message:'Invalid email or password*'})
     }
 })
 

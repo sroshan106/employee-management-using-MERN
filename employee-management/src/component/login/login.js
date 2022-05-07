@@ -10,7 +10,7 @@ function Login(props) {
         email:"",
         password:"",
     });
-
+    const [loginError, setLoginError ] = useState("");
     const { currentUser } = props;
     const Navigate = useNavigate();
 
@@ -22,7 +22,6 @@ function Login(props) {
 
     function handleChangeUser(e) {
         const {name, value} = e.target;
-
         setUser({
             ...user,
             [name]:value
@@ -30,33 +29,21 @@ function Login(props) {
     }
 
     function validateInput() {
-        let inputVar = {}
 
-        if( ! validEmail.test(user.email)){
-            inputVar['email'] = 'Please enter valid email';
-        } else{
-            inputVar['email'] = '';
-        }
-
-        if( ! validPassword.test(user.password)){
-            inputVar['password'] = 'Please enter valid password';
-        } else{
-            inputVar['password'] = '';
-        }
-
-        if ( inputVar['password']==="" && inputVar['email']==="" ){
-            return true;
-        } else {
+        if( ! validEmail.test(user.email) ){
             return false;
+        } else{
+            return true;
         }
     }
 
     function handleSubmit(e) {
-        
         e.preventDefault();
         if ( ! validateInput() ) {
-            return;
+            setLoginError("Please enter a valid email*");
+            return
         }
+        setLoginError("");
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -65,31 +52,37 @@ function Login(props) {
         fetch('http://localhost:4600/login', requestOptions)
         .then(response => response.json())
         .then((data) => {
-            if(data.message==="Success" && data.token) {
+            console.log(data);
+            if(data.isValid && data.token) {
                 localStorage.setItem("token", data.token);
-                
                 Navigate('/');
+            } else {
+                setLoginError(data.message);
             }
         }
         );
     }
 
     return (
-        <div className='container'>
+
+        <div className='login-container'>
             <div className='login-wrapper'>
                 <div className="imgcontainer">
                     <img src={logo} alt="Avatar" className="avatar" />
                 </div>
 
                 <form onSubmit={handleSubmit}>
+                    {loginError && <div className='warning-message'><p>{loginError}</p></div>}
                     <div className='inputBoxes'>
                         <input type="text" name="email"value={user.email} onChange={handleChangeUser} placeholder="Email"/>
                     </div>
                     <div className='inputBoxes'>
                         <input type="password" name="password"value={user.password} onChange={handleChangeUser} placeholder="Password"/>
                     </div>
+                    
                     <div className="login-button"><input type="submit" value="Login" /></div>
                 </form>
+                
                 <h2>OR</h2>
                 <div className='register-button'>
                     <Link to="/register">Register Now</Link>

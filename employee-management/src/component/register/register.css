@@ -1,9 +1,9 @@
-.login-container {
+.register-container {
     margin: auto;
     width: 80%;
     padding: 100px 0;
 }
-.login-container .login-wrapper {
+.register-container .register-wrapper {
     width: 50%;
     margin: auto;
     display: flex;
@@ -11,18 +11,14 @@
     justify-content: center;
     align-items: center;
 }
-.login-container .avatar {
-    height: 200px;
-    border-radius: 50%;
-}
-.login-container .inputBoxes input {
+.register-container .inputBoxes input {
     font-size: larger;
     margin: 20px auto 0 auto;
     width: 300px;
     padding: 12px;
     border: 1px solid #ccc;
 }
-.login-container .login-button input {
+.register-container .register-button {
     text-decoration: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     cursor: pointer;
@@ -37,30 +33,42 @@
     color: #1b1b1b;
     background: #66a1b8;
 }
-.login-container .login-button input:hover, .login-container .register-button a:hover {
+.register-container .login-button a:hover, .register-container .register-button:hover {
     background: #3f7f99;
 }
-.login-container .register-button a {
+.register-container .login-button a {
     text-decoration: none;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     text-transform: uppercase;
     font-size: larger;
     font-weight: 600;
     margin-top: 50px;
-    padding: 12px 92px;
+    padding: 12px 110px;
     border: 1px solid #ccc;
     text-align: center;
     background: #66a1b8;
     color: #1b1b1b;
 }
-.login-container input, .login-container a {
+.register-container input, .register-container a, .register-container button {
     border-radius: 10px;
 }
-.login-container .warning-message p {
+.register-container .header-form h2 {
+    margin-bottom: 0;
+}
+.register-container .warning-message {
     font-size: small;
     font-weight: 400;
     text-decoration: none;
     color: red;
     font-style: italic;
-    margin: 20px 0px;
+    margin: 10px 0 0 0;
+}
+
+
+.register-container .info-message {
+    font-size: small;
+    font-weight: 400;
+    text-decoration: none;
+    font-style: italic;
+    margin: 10px 0 0 0;
 }
