@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { validEmail, validPassword } from '../regex/regex';
+import { validEmail } from '../regex/regex';
 import './login.css';
 import logo from './login-icon.jpg';
 
