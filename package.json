@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {  
     "start": "node server.js",
-    "heroku-postbuild": "cd employee-management && npm install --only=dev && npm install && npm run build"
+    "heroku-postbuild": "cd employee-management && npm install && npm install && npm run build"
   },
   "engines": {
     "node": "14.19.0"
