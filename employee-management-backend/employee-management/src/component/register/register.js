@@ -50,7 +50,7 @@ export default function Register(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
         };
-        fetch('http://localhost:4600/register', requestOptions)
+        fetch('http://localhost:5000/register', requestOptions)
         .then(response => response.json())
         .then( (data) => {
             if(data.isSaved) {

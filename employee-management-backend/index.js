@@ -6,10 +6,11 @@ const validatorEmail = require("email-validator");
 
 
 const app=express();
+const port = process.env.PORT || 5000;
 
 const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json(), urlEncodedParser );
-
+// app.use(cors())
 
 app.use((req, res, next) => {
     res.append('Access-Control-Allow-Origin', ['*']);
@@ -113,4 +114,4 @@ function verifyUser(req,res, next){
 app.get('/homepage', verifyUser, (req,res) => {
     res.json({isLoggedIn:true,username:req.user.username,id:req.user.id, email:req.user.email})
 })
-app.listen(4600);
+app.listen(port);

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
+const connection = process.env.MONGODB_CONNECTION_STRING;
 
-// mongoose.set('bufferCommands', false);
-mongoose.connect("mongodb://localhost:27017/employeeDb", {
+mongoose.connect(connection, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}, () => {
-    console.log("db connected");
-})
+}).then(() => console.log("MongoDB has been connected"))
+.catch((err) => console.log(err));
 
 
 const userSchema = mongoose.Schema({

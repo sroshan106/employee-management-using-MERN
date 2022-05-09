@@ -49,7 +49,7 @@ function Login(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(user),
         };
-        fetch('http://localhost:4600/login', requestOptions)
+        fetch('http://localhost:5000/login', requestOptions)
         .then(response => response.json())
         .then((data) => {
             console.log(data);
