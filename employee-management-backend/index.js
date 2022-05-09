@@ -3,13 +3,17 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const req = require("express/lib/request");
 const validatorEmail = require("email-validator");
+const path = require("path");
+require("dotenv").config();
 
 
 const app=express();
 const port = process.env.PORT || 5000;
 
+app.use(express.static(path.join(__dirname, "client", "build")));
 const urlEncodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.json(), urlEncodedParser );
+
 // app.use(cors())
 
 app.use((req, res, next) => {
@@ -75,7 +79,7 @@ app.post('/login', async function(req,res) {
                 email:dbUser.email
             }
 
-            jwt.sign(payload_data,'I am a secret token',{expiresIn:86400*30},(err,token)=> {
+            jwt.sign(payload_data,process.env.JWT_SECRET,{expiresIn:86400*30},(err,token)=> {
                 if(err){
                     res.json({message:err})
                 }
@@ -88,6 +92,7 @@ app.post('/login', async function(req,res) {
         res.json({isValid:false, message:'Invalid email or password*'})
     }
 })
+
 
 function verifyUser(req,res, next){
     const token = req.headers["x-access-token"]?.split(' ')[1];
@@ -114,4 +119,11 @@ function verifyUser(req,res, next){
 app.get('/homepage', verifyUser, (req,res) => {
     res.json({isLoggedIn:true,username:req.user.username,id:req.user.id, email:req.user.email})
 })
+
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
+
 app.listen(port);

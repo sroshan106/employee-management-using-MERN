@@ -17,7 +17,7 @@ function Homepage(props) {
             method: 'GET',
             headers: authHeader(),
         };
-        fetch('http://localhost:4600/homepage', requestOptions)
+        fetch('/homepage', requestOptions)
         .then(response => response.json())
         .then((data) => {
             if(data.isLoggedIn && data.username) {
